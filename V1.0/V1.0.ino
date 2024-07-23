@@ -1,7 +1,7 @@
 /*
-====================================================
-Tinyswitch - v1.0 - 11-07-2024 - paalsma@gmail.com
-====================================================
+===============================================
+Tinyswitch - v1.0 - (c)2024 - paalsma@gmail.com
+===============================================
 
 Tiny switch decoder based on the ATTINY85 in conjuction with a LD293D motor driver for 
 usage on a single switch/turnout.
