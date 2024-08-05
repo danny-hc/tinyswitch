@@ -17,6 +17,9 @@ CV1: Address from 1 - 200, default 9.
 CV2: Mirror throw and close (1 = normal, 2 = mirror), default 1.
 CV3: Led signal on boot (number), throw (double) & close (single), (1 = no, 2 = yes), default 1.
 CV4: Pulse duration between 10 - 100ms in 10ms steps, value 1 - 10, default 5 (50ms).
+CV8: Set to 8 or 255 for factory reset.
+
+Functionality to read CV's hasn't been implemented.
 
 On track programming / functions
 ================================
@@ -31,10 +34,10 @@ If interval is > 4 seconds programming mode is closed, old value is retained.
 
 X  Function
 ===========
-3  Change address.
-4  Change mirror.
-5  Change led.
-6  Change pulse. 
+3  Change address (CV1).
+4  Change mirror (CV2).
+5  Change led (CV3).
+6  Change pulse (CV4). 
 
 
 
@@ -124,7 +127,6 @@ void setup()
   // First run? Set all CV's to default in EEPROM
   if (Dcc.getCV(CV_ACCESSORY_DECODER_ADDRESS) == 255 || Dcc.getCV(CV_ACCESSORY_DECODER_RESET) == 255) {
     resetCVFactoryDefault();
-
     fastBlink();
   }
 
@@ -133,6 +135,15 @@ void setup()
   setting_mirror = Dcc.getCV(CV_ACCESSORY_DECODER_MIRROR);
   setting_led = Dcc.getCV(CV_ACCESSORY_DECODER_LED);
   setting_pulse = Dcc.getCV(CV_ACCESSORY_DECODER_PULSE);
+
+  // Any CV values out of bounds? Factory reset
+  if (  setting_address != checkCV(CV_ACCESSORY_DECODER_ADDRESS, setting_address) ||
+        setting_mirror != checkCV(CV_ACCESSORY_DECODER_MIRROR, setting_mirror) ||
+        setting_led != checkCV(CV_ACCESSORY_DECODER_LED, setting_led) ||
+        setting_pulse != checkCV(CV_ACCESSORY_DECODER_PULSE, setting_pulse)) {
+    resetCVFactoryDefault();
+    fastBlink();
+  }
 
   // Show decoder address
   if (setting_led > 1) {
